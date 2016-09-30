@@ -1,0 +1,74 @@
+<div>
+    <h1>Contact Form</h1>
+    <hr/>
+    <form class="form-horizontal">
+        <fieldset>
+            <div class="form-group">
+                <label for="firstName" class="col-xs-2 control-label">First Name</label>
+                <div class="col-xs-10">
+                    <input type="text" class="form-control" id="firstName" ng-model="contact.firstName" placeholder="Enter the First Name" required>
+                </div>
+            </div>
+        </fieldset>
+        <fieldset>
+            <div class="form-group">
+                <label for="lastName" class="col-xs-2 control-label">Last Name</label>
+                <div class="col-xs-10">
+                    <input type="text" class="form-control" id="lastName" ng-model="contact.lastName" placeholder="Enter the Last Name" required>
+                </div>
+            </div>
+        </fieldset>
+        <fieldset>
+            <div class="row">
+                <label class="col-xs-2 control-label">Email</label>
+                <div class="col-xs-10">
+                    <button type="button" ng-click="newField('emails');" class="pull-right btn btn-default btn-circle"><i class="fa fa-plus"></i></button>
+                </div>
+            </div>
+            <hr/>
+            <div class="form-group" ng-repeat="mail in contact.emails track by $index">
+                <div class="col-xs-2">
+                    <select class="form-control custom" ng-model="mail.type" ng-options="option for option in ['Work', 'Home']" required></select>
+                </div>
+                <div class="col-xs-9">
+                    <input type="email" class="form-control" ng-model="mail.value" placeholder="Enter Email Address" required>
+                </div>
+                <div class="col-xs-1">
+                    <button type="button" ng-show="contact.emails.length > 1" ng-click="removeField('emails', $index);" class="pull-right btn btn-default btn-circle"><i class="fa fa-remove"></i></button>
+                </div>
+            </div>
+        </fieldset>
+        <hr/>
+        <fieldset>
+            <div class="row">
+                <label class="col-xs-2 control-label">Contact No</label>
+                <div class="col-xs-10">
+                    <button type="button" ng-click="newField('phones');" class="pull-right btn btn-default btn-circle"><i class="fa fa-plus"></i></button>
+                </div>
+            </div>
+            <hr/>
+            <div class="form-group" ng-repeat="phone in contact.phones track by $index">
+                <div class="col-xs-2">
+                    <select class="form-control custom" ng-change="setPrefix($index)" ng-model="phone.type" ng-options="option for option in ['Work', 'Home']" required></select>
+                </div>
+                <div class="col-xs-9">
+                    <input type="tel" class="form-control" ng-model="phone.value" placeholder="Enter Contact No" required>
+                </div>
+                <div class="col-xs-1">
+                    <button type="button" ng-show="contact.phones.length > 1" ng-click="removeField('phones', $index);" class="pull-right btn btn-default btn-circle"><i class="fa fa-remove"></i></button>
+                </div>
+            </div>
+        </fieldset>
+        <hr/>
+        <fieldset>
+            <div class="row">
+                <div class="col-xs-offset-6 col-xs-3">
+                    <button type="submit" ng-click="saveContact();" class="btn btn-block btn-default">Save</button>
+                </div>
+                <div class="col-xs-3">
+                    <button type="submit" ui-sref="contacts" class="btn btn-block btn-default">Cancel</button>
+                </div>
+            </div>
+        </fieldset>
+    </form>
+</div>

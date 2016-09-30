@@ -1,0 +1,44 @@
+<div class="content row">
+    <h1 class="col-xs-12">Contact List</h1>
+    <hr/>
+    <div class="col-xs-10">
+        <form class="form-inline">
+            <div class="form-group">
+                <label class="control-label" for="searchBox">Quick Find Contacts</label>
+                <input type="search" class="form-control" id="searchBox" placeholder="Type here">
+            </div>
+        </form>
+    </div>
+    <div class="col-xs-2">
+        <button class="btn btn-default pull-right" ui-sref="contacts.new" type="button">Add Contact</button>
+    </div>
+    <div class="col-xs-12 custom-table">
+        <table ng-show="contacts.length" class="table table-bordered table-striped" ng-click="getClick($event);">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Name</th>
+                    <th>Email Address</th>
+                    <th>Contact No</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="contact in contacts track by $index" id="{{ contact.id }}">
+                    <td>{{ $index+1 }}</td>
+                    <td>{{ contact.name }}</td>
+                    <td>
+                        <ul>
+                            <li ng-repeat="email in contact.emails"><strong>{{ email.type }}</strong>: {{ email.value }}</li>
+                        </ul>
+                    </td>
+                    <td>
+                        <ul>
+                            <li ng-repeat="phone in contact.phones"><strong>{{ phone.type }}</strong>: {{ phone.value }}</li>
+                        </ul>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <p class="text-center waiting" ng-hide="contacts.length">Loading <em class="fa fa-spinner fa-spin"></em></p>
+    </div>
+</div>
