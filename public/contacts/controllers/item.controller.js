@@ -23,7 +23,6 @@
     };
     var editMode = $state.params.item ? true : false;
 
-    $log.info($state.params.item, $state.params);
     $scope.contact = $state.params.item || {
       emails: [defaults.emails()],
       phones: [defaults.phones()]
@@ -32,13 +31,11 @@
 
     function newField(field) {
       $scope.contact[field].unshift(defaults.emails());
-      $log.info($scope.contact[field]);
     }
     $scope.newField = newField;
 
     function removeField(field, index) {
       $scope.contact[field].splice(index, 1);
-      $log.info(field, index, $scope.contact[field]);
     }
     $scope.removeField = removeField;
 
@@ -46,14 +43,12 @@
       var contacts = JSON.parse(localStorage.getItem('contacts')) || [];
       if (editMode) {
         contacts[$scope.contact.id] = $scope.contact;
-        localStorage.setItem('contacts', JSON.stringify(contacts));
-        $state.go('contacts.list');
       } else {
         $scope.contact.id = contacts.length;
         contacts.push($scope.contact);
-        localStorage.setItem('contacts', JSON.stringify(contacts));
-        $state.go('contacts.list');
       }
+      localStorage.setItem('contacts', JSON.stringify(contacts));
+      $state.go('contacts.list');
     }
     $scope.saveContact = saveContact;
 
