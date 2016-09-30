@@ -1,7 +1,7 @@
 <div>
     <h1>Contact Form</h1>
     <hr/>
-    <form class="form-horizontal">
+    <form class="form-horizontal" ng-submit="saveContact();">
         <fieldset>
             <div class="form-group">
                 <label for="firstName" class="col-xs-2 control-label">First Name</label>
@@ -52,7 +52,7 @@
                     <select class="form-control custom" ng-change="setPrefix($index)" ng-model="phone.type" ng-options="option for option in ['Work', 'Home']" required></select>
                 </div>
                 <div class="col-xs-9">
-                    <input type="tel" class="form-control" ng-model="phone.value" placeholder="Enter Contact No" required>
+                    <input type="tel" class="form-control" pattern="/(\+020)|(\+91)+(\d){8,12}/g" ng-model="phone.value" placeholder="Enter Contact No" required>
                 </div>
                 <div class="col-xs-1">
                     <button type="button" ng-show="contact.phones.length > 1" ng-click="removeField('phones', $index);" class="pull-right btn btn-default btn-circle"><i class="fa fa-remove"></i></button>
@@ -63,10 +63,10 @@
         <fieldset>
             <div class="row">
                 <div class="col-xs-offset-6 col-xs-3">
-                    <button type="submit" ng-click="saveContact();" class="btn btn-block btn-default">Save</button>
+                    <button type="submit" class="btn btn-block btn-default">Save</button>
                 </div>
                 <div class="col-xs-3">
-                    <button type="submit" ui-sref="contacts" class="btn btn-block btn-default">Cancel</button>
+                    <button type="button" ui-sref="contacts" class="btn btn-block btn-default">Cancel</button>
                 </div>
             </div>
         </fieldset>

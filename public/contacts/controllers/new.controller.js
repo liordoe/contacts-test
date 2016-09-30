@@ -8,20 +8,23 @@
   NewCtrl.$inject = ['$scope', '$log', '$state'];
 
   function NewCtrl($scope, $log, $state) {
+    var defaults = {
+      emails: {
+        type: 'Work'
+      },
+      phones: {
+        type: 'Work',
+        value: '+020'
+      }
+    };
     $scope.contact = {
-      emails: [{
-        type: 'Work'
-      }],
-      phones: [{
-        type: 'Work'
-      }]
+      emails: [defaults.emails],
+      phones: [defaults.phones]
     };
     $scope.options = ['Work', 'Home'];
 
     function newField(field) {
-      $scope.contact[field].push({
-        type: 'Work'
-      });
+      $scope.contact[field].push(defaults[field]);
       // $log.info($scope.contact[field]);
     }
     $scope.newField = newField;
@@ -33,15 +36,21 @@
     $scope.removeField = removeField;
 
     function saveContact() {
-      $log.info($scope.contact);
+      var contacts = JSON.parse(localStorage.getItem('contacts')) || [];
+      contacts.push($scope.contact);
+      localStorage.setItem('contacts', JSON.stringify(contacts));
+      $state.go('contacts.list');
     }
     $scope.saveContact = saveContact;
 
     function setPrefix(index) {
-      var prefix = $scope.contact.phones[index].type === 'Work' ? '+020' : '+91';
-      $log.info(prefix, index, $scope.contact.phones[index].type);
-      
+      var result = $scope.contact.phones[index].value;
+      if (result) {
+        result = result.replace(/(\+91)|(\+020)/g, '');
       }
+      var prefix = $scope.contact.phones[index].type === 'Work' ? '+020' : '+91';
+      result = prefix + (result || '');
+      $scope.contact.phones[index].value = result;
     }
     $scope.setPrefix = setPrefix;
   }
