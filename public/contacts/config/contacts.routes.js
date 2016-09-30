@@ -28,7 +28,7 @@
           item: null
         },
         templateUrl: 'public/contacts/views/item.html',
-        controller: 'EditController',
+        controller: 'ItemController',
         data: {
           pageTitle: 'Edit'
         }
@@ -36,7 +36,7 @@
       .state('contacts.new', {
         url: '^/new',
         templateUrl: 'public/contacts/views/item.html',
-        controller: 'NewController',
+        controller: 'ItemController',
         data: {
           pageTitle: 'New'
         }

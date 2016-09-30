@@ -7,7 +7,6 @@
 
     DashboardCtrl.$inject = ['$scope', '$state', '$log'];
     function DashboardCtrl($scope, $state, $log){
-        $log.info('state', $state);
     }
 
 }());

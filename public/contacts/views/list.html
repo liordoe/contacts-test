@@ -2,18 +2,18 @@
     <h1 class="col-xs-12">Contact List</h1>
     <hr/>
     <div class="col-xs-10">
-        <form class="form-inline">
+        <form class="form-inline" ng-submit="getList()">
             <div class="form-group">
                 <label class="control-label" for="searchBox">Quick Find Contacts</label>
-                <input type="search" class="form-control" id="searchBox" placeholder="Type here">
+                <input type="text" class="form-control" id="searchBox" placeholder="Type here" ng-model="filter">
             </div>
         </form>
     </div>
     <div class="col-xs-2">
         <button class="btn btn-default pull-right" ui-sref="contacts.new" type="button">Add Contact</button>
     </div>
-    <div class="col-xs-12 custom-table">
-        <table ng-show="contacts.length" class="table table-bordered table-striped" ng-click="getClick($event);">
+    <div class="col-xs-12 custom-table" ng-show="items.length">
+        <table class="table table-bordered table-striped" ng-click="getClick($event);">
             <thead>
                 <tr>
                     <th>#</th>
@@ -23,9 +23,9 @@
                 </tr>
             </thead>
             <tbody>
-                <tr ng-repeat="contact in contacts track by $index" id="{{ contact.id }}">
+                <tr ng-repeat="contact in items track by $index" id="{{ $index }}">
                     <td>{{ $index+1 }}</td>
-                    <td>{{ contact.name }}</td>
+                    <td>{{ contact.firstName }} {{ contact.lastName }}</td>
                     <td>
                         <ul>
                             <li ng-repeat="email in contact.emails"><strong>{{ email.type }}</strong>: {{ email.value }}</li>
@@ -39,6 +39,23 @@
                 </tr>
             </tbody>
         </table>
-        <p class="text-center waiting" ng-hide="contacts.length">Loading <em class="fa fa-spinner fa-spin"></em></p>
+        <ul ng-if="pager.pages.length" class="pagination">
+            <li ng-class="{disabled:pager.currentPage === 1}">
+                <a ng-click="setPage(1)">First</a>
+            </li>
+            <li ng-class="{disabled:pager.currentPage === 1}">
+                <a ng-click="setPage(pager.currentPage - 1)">Previous</a>
+            </li>
+            <li ng-repeat="page in pager.pages" ng-class="{active:pager.currentPage === page}">
+                <a ng-click="setPage(page)">{{page}}</a>
+            </li>
+            <li ng-class="{disabled:pager.currentPage === pager.totalPages}">
+                <a ng-click="setPage(pager.currentPage + 1)">Next</a>
+            </li>
+            <li ng-class="{disabled:pager.currentPage === pager.totalPages}">
+                <a ng-click="setPage(pager.totalPages)">Last</a>
+            </li>
+        </ul>
     </div>
+    <p class="text-center waiting" ng-hide="items.length">No values <em class="fa fa-spinner fa-spin"></em></p>
 </div>
