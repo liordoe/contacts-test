@@ -37,6 +37,7 @@
       }
 
       function range(start, count) {
+        if (count < 0) count = 0;
         return Array.apply(0, Array(count))
           .map(function(element, index) {
             return index + start;
@@ -46,7 +47,7 @@
       var startIndex = (currentPage - 1) * pageSize;
       var endIndex = Math.min(startIndex + pageSize - 1, totalItems - 1);
 
-      var pages = range(startPage, endPage);
+      var pages = range(startPage, endPage - 1);
 
       return {
         totalItems: totalItems,

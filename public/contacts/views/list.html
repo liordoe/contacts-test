@@ -2,17 +2,17 @@
     <h1 class="col-xs-12">Contact List</h1>
     <hr/>
     <div class="col-xs-10">
-        <form class="form-inline" ng-submit="getList()">
+        <form class="form-inline">
             <div class="form-group">
                 <label class="control-label" for="searchBox">Quick Find Contacts</label>
-                <input type="text" class="form-control" id="searchBox" placeholder="Type here" ng-model="filter">
+                <input type="text" class="form-control" id="searchBox" placeholder="Type here" ng-change="setPage(1)" ng-model="filter">
             </div>
         </form>
     </div>
     <div class="col-xs-2">
         <button class="btn btn-default pull-right" ui-sref="contacts.new" type="button">Add Contact</button>
     </div>
-    <div class="col-xs-12 custom-table" ng-show="items.length">
+    <div class="col-xs-12 custom-table" ng-show="items.length" ng-init="getList()">
         <table class="table table-bordered table-striped" ng-click="getClick($event);">
             <thead>
                 <tr>
@@ -23,7 +23,7 @@
                 </tr>
             </thead>
             <tbody>
-                <tr ng-repeat="contact in items track by $index" id="{{ $index }}">
+                <tr ng-repeat="contact in items track by $index" id="{{ contact.id }}">
                     <td>{{ $index+1 }}</td>
                     <td>{{ contact.firstName }} {{ contact.lastName }}</td>
                     <td>
@@ -57,5 +57,7 @@
             </li>
         </ul>
     </div>
-    <p class="text-center waiting" ng-hide="items.length">No values <em class="fa fa-spinner fa-spin"></em></p>
+    <div class="col-xs-12">
+        <p class="text-center waiting" ng-hide="items.length"><em class="fa fa-spinner fa-spin"></em></p>
+    </div>
 </div>

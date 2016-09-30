@@ -5,26 +5,24 @@
     .module('contacts')
     .controller('ListController', ListCtrl)
 
-  ListCtrl.$inject = ['$scope', '$log', '$state', '$timeout', 'PagerService'];
+  ListCtrl.$inject = ['$scope', '$log', '$state', '$timeout', 'PagerService', 'ListService'];
 
-  function ListCtrl($scope, $log, $state, $timeout, PagerService) {
+  function ListCtrl($scope, $log, $state, $timeout, PagerService, ListService) {
     $scope.contacts = [];
     $scope.pager = {};
     $scope.filter = '';
 
     function setPage(page) {
-      if (page < 0 || page > $scope.pager.totalPages) {
+      var filteredData = $scope.filter ? $scope.contacts.filter(filterEntries) : $scope.contacts;
+      $scope.pager = PagerService.GetPager(filteredData.length, page);
+      if (page < 1 || page > $scope.pager.totalPages) {
+        $scope.items = [];
         return;
       }
 
-      $scope.pager = PagerService.GetPager($scope.contacts.length, page);
-      $scope.items = $scope.contacts.slice($scope.pager.startIndex, $scope.pager.endIndex + 1);
+      $scope.items = filteredData.slice($scope.pager.startIndex, $scope.pager.endIndex + 1);
     }
     $scope.setPage = setPage;
-
-    $timeout(function() {
-      getList();
-    }, 1000);
 
     function getClick(e) {
       var i = 0,
@@ -34,7 +32,6 @@
           i++;
           elem = elem.parent();
         } else {
-          $log.info(elem.attr('id'), i);
           break;
         }
       }
@@ -51,56 +48,30 @@
     }
 
     function filterEntries(obj) {
+      var value = false;
       for (var key in obj) {
         if (getType(obj[key]) === 'Array' || getType(obj[key]) === 'Object') {
-          return filterEntries(obj[key]);
-        } else if (key.indexOf('$$') === -1 && getType(obj[key]) === 'String' && obj[key].indexOf($scope.filter) !== -1) {
+          value = value || filterEntries(obj[key]);
+        } else if (key.indexOf('$$') === -1 && key !== 'id' && String(obj[key]).toLowerCase().indexOf($scope.filter) !== -1)
           return true;
-        }
       }
-      return false;
+      return value || false;
     }
 
     function getList() {
       var local = JSON.parse(localStorage.getItem('contacts'));
       if (local) {
         $scope.contacts = local;
+        setPage(1);
       } else {
-        var out = [];
-        for (var i = 0; i < 100; i++) {
-          out.push({
-            id: i,
-            firstName: 'Name' + (i + 1),
-            lastName: 'Sur' + (i + 1),
-            emails: (function() {
-              var limit = Math.floor(Math.random() * (3 - 1 + 1)) + 1,
-                out = [];
-              for (let i = 0; i < limit; i++) {
-                out.push({
-                  type: i % 2 === 0 ? 'Work' : 'Home',
-                  value: 'testemail@email.com'
-                });
-              }
-              return out;
-            })(),
-            phones: (function() {
-              var limit = Math.floor(Math.random() * (3 - 1 + 1)) + 1,
-                out = [];
-              for (let i = 0; i < limit; i++) {
-                out.push({
-                  type: i % 2 === 0 ? 'Work' : 'Home',
-                  value: i % 2 === 0 ? '+0200000000' : '+9100000000'
-                });
-              }
-              return out;
-            })()
-          });
-        }
-        $scope.contacts = out;
-        localStorage.setItem('contacts', JSON.stringify($scope.contacts));
+        ListService.getList().then(function(response) {
+          $scope.contacts = response.data;
+          localStorage.setItem('contacts', JSON.stringify($scope.contacts));
+          setPage(1);
+        }, function(status, err) {
+          $log.error(status, err);
+        });
       }
-      $scope.contacts = $scope.contacts.filter(filterEntries);
-      setPage(0);
     }
     $scope.getList = getList;
   }

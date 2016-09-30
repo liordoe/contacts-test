@@ -1,12 +1,14 @@
-(function(){
-    'use strict';
+(function() {
+  'use strict';
 
-    angular
-        .module('core')
-        .controller('DashboardController', DashboardCtrl)
+  angular
+    .module('core')
+    .controller('DashboardController', DashboardCtrl)
 
-    DashboardCtrl.$inject = ['$scope', '$state', '$log'];
-    function DashboardCtrl($scope, $state, $log){
-    }
+  DashboardCtrl.$inject = ['$scope', '$state', '$log'];
+
+  function DashboardCtrl($scope, $state, $log) {
+    localStorage.removeItem('contacts');
+  }
 
 }());
