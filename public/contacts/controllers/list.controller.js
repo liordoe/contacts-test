@@ -52,7 +52,7 @@
       for (var key in obj) {
         if (getType(obj[key]) === 'Array' || getType(obj[key]) === 'Object') {
           value = value || filterEntries(obj[key]);
-        } else if (key.indexOf('$$') === -1 && key !== 'id' && String(obj[key]).toLowerCase().indexOf($scope.filter) !== -1)
+        } else if (key.indexOf('$$') === -1 && key !== 'id' && String(obj[key]).toLowerCase().indexOf($scope.filter.toLowerCase()) !== -1)
           return true;
       }
       return value || false;
